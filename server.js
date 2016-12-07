@@ -24,6 +24,8 @@ bot.on('start', function(){
     //    bot.postMessageToChannel('the-matrix', 'Hello channel!', params);
 //    notifyUser("chuckdries","http://chuckdries.rocks","Chuck Dries","Chuck Dries: Executive Innovator");
 });
+
+//setup functions
 function initialize(){
     loadSettings();
 }
@@ -42,6 +44,8 @@ function loadSettings(){
         }
     })
 }
+
+//File IO functions for loading and saving information
 //I know all these functions are the same, but I wanted to write them out by hand in case I ever end up doing anything different with them.
 function loadSeen(fileName){
     fs.readFile(fileName,"utf8",function(err,data){
@@ -91,6 +95,8 @@ function saveArray(fileName){
         }
     }); 
 }
+
+//the meat function, the big kahuna. Checking if a new story has been published and dealing with it properly if it has
 function checkSection(section, res, callback){
     //TODO: call this periodically
     //This should check against the array of known stories, add unknowns to the story, and if there is an unknown pass its details to another function to actually handle notification of the user
@@ -98,7 +104,7 @@ function checkSection(section, res, callback){
 
     request(sectionUrl, function(error, response) {
         if (!error) {
-            var articles = JSON.parse(response.body)[0].articles;
+            var articles = JSON.parse(response.body)[0].articles; //why is response body an array with one item in it? Who knows!
             console.log(articles);
             var string = "";
             for (index in articles){
@@ -123,6 +129,8 @@ function checkSection(section, res, callback){
 
 
 } 
+
+//helper to return relevant information about an article
 function parseArticle(article){
     var data = {
         headline: qs.unescape(article.headline),
@@ -133,9 +141,11 @@ function parseArticle(article){
     data.userName = lookUpUser(data.authorName);
     return data;
 }
+//helper to return slack username from gryphon authorname
 function lookUpUser(authorName){
     return users[authorName];
 }
+//helper function to send notifications to slack users
 function notifyUser(username, artUrl, artHeadline, artSubhead){
     var message = {
         as_user: "true",
@@ -150,7 +160,7 @@ function notifyUser(username, artUrl, artHeadline, artSubhead){
     bot.postTo(username,"You've been published, check it out!", message);
 }
 
-
+//web endpoints, mostly for testing and debugging
 app.get('/test',function(req,res){
     res.status(200).send(sections);
     bot.getUserId("Chuck Dries").then(function(val){console.log(val);});
@@ -203,3 +213,4 @@ console.log('Magic happens on port 8081');
 exports = module.exports = app;
 
 initialize();
+//get things rolling! bots handles the actual slack connection init, this simply loads the serialized data we need to work correctly.
