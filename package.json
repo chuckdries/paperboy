@@ -1,14 +1,12 @@
 {
   "name": "paperboy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Newsroom utilities.",
   "main": "server.js",
-  "author": "Scotch",
+  "author": "chuckdries",
   "dependencies": {
-    "@slack/client": "^3.7.0",
     "express": "latest",
     "request": "latest",
-    "slackbots": "^0.5.2",
-    "sqlite3": "^3.1.5"
+    "slackbots": "^0.5.2"
   }
 }
