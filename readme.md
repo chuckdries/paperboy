@@ -1,13 +1,13 @@
 # Paperboy!
 
 Paperboy is a slack bot that's going to grow to help us around the newsroom. Right now his killer feature is the ability to crawl gryphon and watch for new articles, PMing the author of the article when it finds a new one.
-But, we plan to grow him! I'm building this with some portability in mind, eventually maybe spinning his skills off into modules so he can be used by other gryphon customers and other newsrooms in general.
+Eventually, we'd like him to get smarter. I'm building this with some portability in mind, eventually maybe spinning his skills off into modules so he can be used by other gryphon customers and other newsrooms in general.
 For now though, he's pretty specific to our needs.
 
-## The future
+## The near future
 
-- Actually finish the core crawl and notify functionality
-- Notify multimedia authors when the articles their stuff is attached to run
+[] Actually finish the core crawl and notify functionality
+[] Notify multimedia authors when the articles their stuff is attached to run
 
 ## Configuration
 
