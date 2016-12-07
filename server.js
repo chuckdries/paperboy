@@ -22,7 +22,7 @@ bot.on('start', function(){
         as_user: 'true'
     };
     //    bot.postMessageToChannel('the-matrix', 'Hello channel!', params);
-    notifyUser("chuckdries","http://chuckdries.rocks","website");
+//    notifyUser("chuckdries","http://chuckdries.rocks","Chuck Dries","Chuck Dries: Executive Innovator");
 });
 function initialize(){
     loadSettings();
@@ -91,17 +91,63 @@ function saveArray(fileName){
         }
     }); 
 }
-function checkSection(section, callback){
-    //TODO: global static section index
+function checkSection(section, res, callback){
     //TODO: call this periodically
     //This should check against the array of known stories, add unknowns to the story, and if there is an unknown pass its details to another function to actually handle notification of the user
+    var sectionUrl = sections[section];
+
+    request(sectionUrl, function(error, response) {
+        if (!error) {
+            var articles = JSON.parse(response.body)[0].articles;
+            console.log(articles);
+            var string = "";
+            for (index in articles){
+                var uid = articles[index].uid;
+                //check if the article has been seen before
+                if (seen.has(uid)){
+                    console.log("hit!");
+                } else {
+                    console.log("No hit, article is new"); 
+                    seen.add(uid);
+                }
+                article = parseArticle(articles[index]);
+                string = string + "Article \"" + article.headline + "\" has the subhead \"" + 
+                    article.subhead + "\" and was written by " + article.authorName + 
+                    " (also known as @" + article.userName + " on slack). ";
+                notifyUser("chuckdries", article.url, article.headline, article.subhead);
+            }
+            res.status(200).send(string);
+            saveArray(settings.arrayPath);
+        }
+    });
+
+
 } 
-function lookUpUser(authorName){
-    return users[decodeURI(authorName)];
+function parseArticle(article){
+    var data = {
+        headline: qs.unescape(article.headline),
+        subhead: qs.unescape(article.subhead),
+        url: qs.unescape(article.getURL),
+        authorName: qs.unescape(article.getAuthor[0]),
+    }
+    data.userName = lookUpUser(data.authorName);
+    return data;
 }
-function notifyUser(username, url, headline){
-    var message = `Hey! You\'ve been published. Check it out! ${url}`;  
-    bot.postTo(username, message,{as_user:'true'});
+function lookUpUser(authorName){
+    return users[authorName];
+}
+function notifyUser(username, artUrl, artHeadline, artSubhead){
+    var message = {
+        as_user: "true",
+        "attachments": [
+        {
+            "title": artHeadline,
+            "title_link": artUrl,
+            "text": artSubhead
+        }
+        ]
+    }
+    bot.postTo(username,"You've been published, check it out!", message);
 }
 
 
@@ -112,7 +158,8 @@ app.get('/test',function(req,res){
 
 
 app.get('/scrape', function(req, res) {
-
+    checkSection("politics", res);
+/*
     url = 'http://www.statepress.com/section/politics.json';
 
     // The structure of our request call
@@ -146,7 +193,7 @@ app.get('/scrape', function(req, res) {
             saveArray(settings.arrayPath);
         }
     });
-
+*/
 });
 
 app.listen('8081')
