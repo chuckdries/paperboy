@@ -1,3 +1,4 @@
+//a quick demo of sending a message through a web hook
 var request = require('request');
 var url = require('url');
 
