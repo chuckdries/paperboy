@@ -6,8 +6,8 @@ For now though, he's pretty specific to our needs.
 
 ## The near future
 
-[ ] Actually finish the core crawl and notify functionality
-[ ] Notify multimedia authors when the articles their stuff is attached to run
+- [ ] Actually finish the core crawl and notify functionality
+- [ ] Notify multimedia authors when the articles their stuff is attached to run
 
 ## Configuration
 
