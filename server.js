@@ -169,41 +169,6 @@ app.get('/test',function(req,res){
 
 app.get('/scrape', function(req, res) {
     checkSection("politics", res);
-/*
-    url = 'http://www.statepress.com/section/politics.json';
-
-    // The structure of our request call
-    // The first parameter is our URL
-    // The callback function takes 3 parameters, an error, response status code and the html
-
-    request(url, function(error, response, html) {
-
-        // First we'll check to make sure no errors occurred when making the request
-
-        if (!error) {
-            // Next, we'll utilize the cheerio library on the returned html which will essentially give us jQuery functionality
-            var articles = JSON.parse(response.body)[0].articles;
-            var string = "";
-            for (index in articles){
-                var uid = articles[index].uid;
-                //check if the article has been seen before
-                if (seen.has(uid)){
-                    console.log("hit!");
-                    string = string + ", " + lookUpUser(articles[index].getAuthor[0]);
-                } else {
-                    console.log("No hit, article is new"); 
-                    seen.add(uid);
-                    string = string + ", " + lookUpUser(articles[index].getAuthor[0]);
-                }
-                
-
-            }
-
-            res.status(200).send(string);
-            saveArray(settings.arrayPath);
-        }
-    });
-*/
 });
 
 app.listen('8081')
@@ -213,4 +178,4 @@ console.log('Magic happens on port 8081');
 exports = module.exports = app;
 
 initialize();
-//get things rolling! bots handles the actual slack connection init, this simply loads the serialized data we need to work correctly.
+//get things rolling! bot handles the actual slack connection init, this simply loads the serialized data we need to work correctly.
